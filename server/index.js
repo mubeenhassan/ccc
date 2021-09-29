@@ -32,12 +32,19 @@ async function scrapeData() {
   }
 }
 
-app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.get("/api", async (req, res) => {
 let data = await scrapeData(); 
   res.send(data);
 });
+
+if(process.env.NODE_ENV=='production'){
+  app.use(express.static('client/build'));
+  const path=require('path');
+  app.get("*", (req, res)=>{
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  })
+}
 
 
 app.listen(port, () => {
