@@ -3,7 +3,7 @@ const axios = require("axios");
 const cors = require('cors');
 const cheerio = require("cheerio");
 const app = express();
-const port = 5000;
+const port = 3001;
 app.use(cors());
 
 const url = "https://www.columbiacommunityconnection.com/the-dalles?format=rss";
@@ -31,7 +31,7 @@ async function scrapeData() {
     console.error(err);
   }
 }
-app.get("/", async (req, res) => {
+app.get("/api", async (req, res) => {
 let data = await scrapeData(); 
   res.send(data);
 });

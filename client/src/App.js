@@ -48,7 +48,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.setState({ isloading: true })
-    axios.get(`http://localhost:5000/`).then((res) => {
+    axios.get(`/api`).then((res) => {
       this.puringfyingHtml(res.data)
       // for (let i = 0; i < document.getElementsByTagName('img').length; i++) {
       //   document.getElementsByTagName('img')[i].setAttribute('crossorigin', 'anonymous')
