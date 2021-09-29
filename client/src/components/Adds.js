@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
 export default class Adds extends Component {
- shouldComponentUpdate() {
-  return false;
- }
+//  shouldComponentUpdate() {
+//   return false;
+//  }
  
  render() {
-  switch (Math.floor(Math.random() * 9) + 1) {
+  switch (this.props.random) {
    case 1:
      return(
        <div id='adplugg-placement-1-7307'>

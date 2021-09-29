@@ -6,6 +6,16 @@ import logo from './logo.png'
 import Adds from './components/Adds'
 import html2PDF from 'jspdf-html2canvas'
 
+import Add_1 from './images/Add_1.png';
+import Add_2 from './images/Add_2.png';
+import Add_3 from './images/Add_3.png';
+import Add_4 from './images/Add_4.png';
+import Add_5 from './images/Add_5.png';
+import Add_6 from './images/Add_6.png';
+import Add_7 from './images/Add_7.jpeg';
+import Add_8 from './images/Add_8.png';
+import Add_9 from './images/Add_9.png';
+
 const defaultOptions = {
   jsPDF: {
     unit: 'px',
@@ -24,7 +34,7 @@ const defaultOptions = {
     bottom: 10,
     left: 0,
   },
-  output: 'jspdf-generate.pdf', 
+  output: 'Columbia-Community-Connection-Posts.pdf', 
   init: function() {},
   success: function(pdf) {
     pdf.save(this.output);
@@ -43,27 +53,33 @@ export default class App extends React.Component {
       isloading: false,
       isDownloading: false,
       selectedPosts: 0,
+      adsToShow:[],
     }
   }
 
   componentDidMount() {
     this.setState({ isloading: true })
-    axios.get(`/api`).then((res) => {
+    axios.get(`http://localhost:3001/api`).then((res) => {
       this.puringfyingHtml(res.data)
-      // for (let i = 0; i < document.getElementsByTagName('img').length; i++) {
-      //   document.getElementsByTagName('img')[i].setAttribute('crossorigin', 'anonymous')
-      // }
     })
+    this.watherFun(document, 'script', 'weatherwidget-io-js')
+    let random =[Math.floor(Math.random() * 9) + 1, Math.floor(Math.random() * 9) + 1]
+    this.setState({
+      adsToShow:random
+    })
+       
+    // document.getElementById('add-1').appendChild(this.injectImages(random[0]));
+    // document.getElementById('add-2').appendChild(this.injectImages(random[1]));
 
+  }
+  returnToday=()=>{
     var today = new Date()
     var dd = String(today.getDate()).padStart(2, '0')
     var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
-    var yyyy = today.getFullYear()
-
-    today = mm + '/' + dd + '/' + yyyy
-    document.getElementById('today-date').innerHTML = today
-    this.watherFun(document, 'script', 'weatherwidget-io-js')
+    var yyyy = today.getFullYear();
+    return today = mm + '/' + dd + '/' + yyyy
   }
+
 
   puringfyingHtml = (html) => {
     let pureHTML = []
@@ -90,11 +106,9 @@ export default class App extends React.Component {
         res.lastIndexOf('</title>') + 8,
         res.lastIndexOf('</guid>')
       )
-      // crossOrigin="anonymous"
 
       res = res.replace(partToRemove, '')
 
-      // res = res.replace(/<img/g, '<img crossorigin="anonymous"');
       pureHTML.push({
         postID: 'post_' + i,
         title: item.title,
@@ -144,11 +158,63 @@ export default class App extends React.Component {
     }
   }
 
+
+  injectImages=(val)=>{
+
+    var img = document.createElement('img'); 
+    img.className="add-img"
+    switch (val) {
+      case 1:
+        img.src=Add_1;
+        return img      
+      case 2:
+        img.src=Add_2;
+        return img      
+      case 3:
+        img.src=Add_3;
+        return img      
+      case 4:
+        img.src=Add_4;
+        return img      
+      case 4:
+        img.src=Add_4;
+        return img      
+      case 5:
+        img.src=Add_5;
+        return img      
+      case 6:
+        img.src=Add_6;
+        return img      
+      case 7:
+        img.src=Add_7;
+        return img      
+      case 8:
+        img.src=Add_8;
+        return img      
+      case 9:
+        img.src=Add_9;
+        return img      
+    
+      default:
+        break;
+    }
+  }
+
   handleDownload = async () => {
+
+    if(this.state.selectedPosts <=0){
+      alert("Please select any post to download.");
+      return;
+    }    
+    document.getElementById('add-1').appendChild(this.injectImages(this.state.adsToShow[0]));
+    document.getElementById('add-2').appendChild(this.injectImages(this.state.adsToShow[1]));
+
+    this.injectImages(this.state.adsToShow[1]);
     let main = document.getElementById('main');
     let downloadBtn= document.getElementById('downloadBtn');
     let myPDf= document.getElementById('pdf-container');
     let dis =document.getElementById('display-container');
+    document.getElementById("hide").style.display="none"
     myPDf.style.display="block";
     dis.style.display="none";
     downloadBtn.style.display="none";
@@ -254,7 +320,7 @@ export default class App extends React.Component {
                 </h5>
               </div>
               <div className='download-btn-container'>
-                <h2 id='today-date'></h2>
+                <h2 id='today-date'>{this.returnToday()}</h2>
                 <button id="downloadBtn" onClick={this.handleDownload}>Download Posts</button>
               </div>
             </div>
@@ -320,10 +386,10 @@ export default class App extends React.Component {
               </div>
 
               <div className='ads-data'>
-                <div className='ads'>
-                  <Adds />
+                <div id='add-1' className='ads'>
+                  {!this.state.isDownloading &&<Adds random={this.state.adsToShow[0]} />}
                 </div>
-                <div className='wather'>
+                <div id="hide" className='wather'>
                   <a
                     className='weatherwidget-io'
                     href='https://forecast7.com/en/45d59n121d18/the-dalles/?unit=us'
@@ -367,8 +433,16 @@ export default class App extends React.Component {
                   elevate all the residents and businesses of the Mid-Columbia
                   Region.
                 </div>
-                <div className='ads'>
-                  <Adds />
+                <div id='add-2' className='ads'>
+                  <Adds random={this.state.adsToShow[1]}/>
+                  {/* <Adds random={2} />
+                  <Adds random={3} />
+                  <Adds random={4} />
+                  <Adds random={5} />
+                  <Adds random={6} />
+                  <Adds random={7} />
+                  <Adds random={8} />
+                  <Adds random={9} /> */}
                 </div>
               </div>
             </div>

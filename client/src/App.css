@@ -20,7 +20,7 @@ p{
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   background-color: #ededed;
 }
 .App{
@@ -284,12 +284,24 @@ input[type='checkbox']:checked + label:after {
   transform: rotate(45deg);
 }
 
-/* #pdf-container{
+#pdf-container{
   display: none;
-} */
+}
 
 .adplugg-ad-wrapper{
   transform: scale(0.6);
   margin-left: -60px;
   
+}
+
+.add-img{
+  width: 250px;
+  max-width: 250px;
+  margin-top: -400px;
+  margin-left: -8px;
+}
+
+.adplugg-custom-ad{
+  height: 220px;
+  margin-bottom: 80px;
 }
