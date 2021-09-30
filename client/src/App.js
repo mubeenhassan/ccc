@@ -6,15 +6,15 @@ import logo from './logo.png'
 import Adds from './components/Adds'
 import html2PDF from 'jspdf-html2canvas'
 
-import Add_1 from './images/Add_1.png';
-import Add_2 from './images/Add_2.png';
-import Add_3 from './images/Add_3.png';
-import Add_4 from './images/Add_4.png';
-import Add_5 from './images/Add_5.png';
-import Add_6 from './images/Add_6.png';
-import Add_7 from './images/Add_7.jpeg';
-import Add_8 from './images/Add_8.png';
-import Add_9 from './images/Add_9.png';
+import Add_1 from './images/Add_1.png'
+import Add_2 from './images/Add_2.png'
+import Add_3 from './images/Add_3.png'
+import Add_4 from './images/Add_4.png'
+import Add_5 from './images/Add_5.png'
+import Add_6 from './images/Add_6.png'
+import Add_7 from './images/Add_7.jpeg'
+import Add_8 from './images/Add_8.png'
+import Add_9 from './images/Add_9.png'
 
 const defaultOptions = {
   jsPDF: {
@@ -34,14 +34,14 @@ const defaultOptions = {
     bottom: 10,
     left: 0,
   },
-  output: 'Columbia-Community-Connection-Posts.pdf', 
-  init: function() {},
-  success: function(pdf) {
-    pdf.save(this.output);
+  output: 'Columbia-Community-Connection-Posts.pdf',
+  init: function () {},
+  success: function (pdf) {
+    pdf.save(this.output)
   },
   watermark({ pdf, pageNumber, totalPageNumber }) {
-    pdf.setTextColor('gray');
-    pdf.text(375,  20, `Page : ${pageNumber}/${totalPageNumber}`);
+    pdf.setTextColor('gray')
+    pdf.text(375, 20, `Page : ${pageNumber}/${totalPageNumber}`)
   },
 }
 
@@ -53,33 +53,31 @@ export default class App extends React.Component {
       isloading: false,
       isDownloading: false,
       selectedPosts: 0,
-      adsToShow:[],
+      adsToShow: [],
     }
   }
 
   componentDidMount() {
     this.setState({ isloading: true })
-    axios.get(`/api`).then((res) => {
+    axios.get(`http://localhost:3001/api`).then((res) => {
       this.puringfyingHtml(res.data)
     })
     this.watherFun(document, 'script', 'weatherwidget-io-js')
-    let random =[Math.floor(Math.random() * 9) + 1, Math.floor(Math.random() * 9) + 1]
+    let random = [
+      Math.floor(Math.random() * 9) + 1,
+      Math.floor(Math.random() * 9) + 1,
+    ]
     this.setState({
-      adsToShow:random
+      adsToShow: random,
     })
-       
-    // document.getElementById('add-1').appendChild(this.injectImages(random[0]));
-    // document.getElementById('add-2').appendChild(this.injectImages(random[1]));
-
   }
-  returnToday=()=>{
+  returnToday = () => {
     var today = new Date()
     var dd = String(today.getDate()).padStart(2, '0')
     var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
-    var yyyy = today.getFullYear();
-    return today = mm + '/' + dd + '/' + yyyy
+    var yyyy = today.getFullYear()
+    return (today = mm + '/' + dd + '/' + yyyy)
   }
-
 
   puringfyingHtml = (html) => {
     let pureHTML = []
@@ -158,136 +156,87 @@ export default class App extends React.Component {
     }
   }
 
-
-  injectImages=(val)=>{
-
-    var img = document.createElement('img'); 
-    img.className="add-img"
+  injectImages = (val) => {
+    var img = document.createElement('img')
+    img.className = 'add-img'
     switch (val) {
       case 1:
-        img.src=Add_1;
-        return img      
+        img.src = Add_1
+        return img
       case 2:
-        img.src=Add_2;
-        return img      
+        img.src = Add_2
+        return img
       case 3:
-        img.src=Add_3;
-        return img      
+        img.src = Add_3
+        return img
       case 4:
-        img.src=Add_4;
-        return img      
+        img.src = Add_4
+        return img
       case 4:
-        img.src=Add_4;
-        return img      
+        img.src = Add_4
+        return img
       case 5:
-        img.src=Add_5;
-        return img      
+        img.src = Add_5
+        return img
       case 6:
-        img.src=Add_6;
-        return img      
+        img.src = Add_6
+        return img
       case 7:
-        img.src=Add_7;
-        return img      
+        img.src = Add_7
+        return img
       case 8:
-        img.src=Add_8;
-        return img      
+        img.src = Add_8
+        return img
       case 9:
-        img.src=Add_9;
-        return img      
-    
+        img.src = Add_9
+        return img
+
       default:
-        break;
+        break
     }
   }
 
   handleDownload = async () => {
+    if (this.state.selectedPosts <= 0) {
+      alert('Please select any post to download.')
+      return
+    }
+    document
+      .getElementById('add-1')
+      .appendChild(this.injectImages(this.state.adsToShow[0]))
+    document
+      .getElementById('add-2')
+      .appendChild(this.injectImages(this.state.adsToShow[1]))
 
-    if(this.state.selectedPosts <=0){
-      alert("Please select any post to download.");
-      return;
-    }    
-    document.getElementById('add-1').appendChild(this.injectImages(this.state.adsToShow[0]));
-    document.getElementById('add-2').appendChild(this.injectImages(this.state.adsToShow[1]));
-
-    this.injectImages(this.state.adsToShow[1]);
-    let main = document.getElementById('main');
-    let downloadBtn= document.getElementById('downloadBtn');
-    let myPDf= document.getElementById('pdf-container');
-    let dis =document.getElementById('display-container');
-    document.getElementById("hide").style.display="none"
-    myPDf.style.display="block";
-    dis.style.display="none";
-    downloadBtn.style.display="none";
-    main.style.border="none"
+    let main = document.getElementById('main')
+    let downloadBtn = document.getElementById('downloadBtn')
+    let myPDf = document.getElementById('pdf-container')
+    let dis = document.getElementById('display-container')
+    document.getElementById('hide').style.display = 'none'
+    myPDf.style.display = 'block'
+    dis.style.display = 'none'
+    downloadBtn.style.display = 'none'
+    main.style.border = 'none'
     this.setState({ isDownloading: true })
 
     const pdf = await html2PDF(main, defaultOptions)
-   
 
-
-
-    // var api_endpoint = "https://selectpdf.com/api2/convert/";
-    // var api_key = "d212ca46-423f-4270-817a-4444204eaa2a";
- 
-    // var url = 'https://www.columbiacommunityconnection.com/the-dalles/this-week-in-gorge-entertainment-sept-27/jim-drake'; // current page
- 
-    // var params = {
-    //     key: api_key, 
-    //     html: document.documentElement.innerHTML,
-    //     page_size:'a4'
-    // }
- 
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('POST', api_endpoint, true);
-    // xhr.setRequestHeader("Content-Type", "application/json");
- 
-    // xhr.responseType = 'arraybuffer';
- 
-    // xhr.onload = function (e) {
-    //     if (this.status == 200) {
-    //       console.log(this.response)
-    //         //console.log('Conversion to PDF completed ok.');
- 
-    //         var blob = new Blob([this.response], { type: 'application/pdf' });
-    //         var url = window.URL || window.webkitURL;
-    //         var fileURL = url.createObjectURL(blob);
-    //         //window.location.href = fileURL;
- 
-    //         //console.log('File url: ' + fileURL);
- 
-    //         var fileName = "Document.pdf";
- 
-    //         if (navigator.appVersion.toString().indexOf('.NET') > 0) {
-    //             // This is for IE browsers, as the alternative does not work
-    //             window.navigator.msSaveBlob(blob, fileName);
-    //         }
-    //         else {
-    //             // This is for Chrome, Firefox, etc.
-    //             var a = document.createElement("a");
-    //             document.body.appendChild(a);
-    //             a.style = "display: none";
-    //             a.href = fileURL;
-    //             a.download = fileName;
-    //             a.click();
-    //         }
-    //     }
-    //     else {
-    //         //console.log("An error occurred during conversion to PDF: " + this.status);
-    //         alert("An error occurred during conversion to PDF.\nStatus code: " + this.status + ", Error: " + String.fromCharCode.apply(null, new Uint8Array(this.response)));
-    //     }
-    // };
- 
-    // xhr.send(JSON.stringify(params));
-
-
-
-
-    myPDf.style.display="none";
-    dis.style.display="block";
-    downloadBtn.style.display="block";
-    main.style.border="2px solid darkgray"
+    myPDf.style.display = 'none'
+    dis.style.display = 'block'
+    downloadBtn.style.display = 'block'
+    main.style.border = '2px solid darkgray'
     this.setState({ isDownloading: false })
   }
+
+  handlePrint=()=>{
+    if (this.state.selectedPosts <= 0) {
+      alert('Please select any post to download.')
+      return
+    }
+    window.print();
+  }
+
+
 
   render() {
     const Loader = () => (
@@ -305,23 +254,63 @@ export default class App extends React.Component {
       </div>
     )
 
+    const CustomButton = (props) => (
+      <div class={`buttons ${props.customClass}`}>
+        <button class="blob-btn" onClick={props.handleClick}>
+          {props.text}
+          <span class='blob-btn__inner'>
+            <span class='blob-btn__blobs'>
+              <span class='blob-btn__blob'></span>
+              <span class='blob-btn__blob'></span>
+              <span class='blob-btn__blob'></span>
+              <span class='blob-btn__blob'></span>
+            </span>
+          </span>
+        </button>
+        <br />
+
+        <svg xmlns='http://www.w3.org/2000/svg' version='1.1'>
+          <defs>
+            <filter id='goo'>
+              <feGaussianBlur
+                in='SourceGraphic'
+                result='blur'
+                stdDeviation='10'
+              ></feGaussianBlur>
+              <feColorMatrix
+                in='blur'
+                mode='matrix'
+                values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7'
+                result='goo'
+              ></feColorMatrix>
+              <feBlend in2='goo' in='SourceGraphic' result='mix'></feBlend>
+            </filter>
+          </defs>
+        </svg>
+      </div>
+    )
+
     return (
       <div className='App'>
+        <div id="pageborder">
+  </div>
         {this.state.isDownloading ? (
           <Loader />
         ) : (
           <div id='main'>
             <div className='header'>
-              <div id='page_number'>0</div>
               <div className='logo-img'>
-                <img src={logo} alt='' crossOrigin="anonymous"/>
+                <img src={logo} alt='' crossOrigin='anonymous' />
                 <h5 className='logo-title'>
                   honest local news for the mid columbia region
                 </h5>
               </div>
               <div className='download-btn-container'>
                 <h2 id='today-date'>{this.returnToday()}</h2>
-                <button id="downloadBtn" onClick={this.handleDownload}>Download Posts</button>
+                <div id="downloadBtn">
+                <CustomButton handleClick={this.handlePrint} text="Create Your Newspaper" customClass="btn-print"/>
+                <CustomButton handleClick={this.handleDownload} text="Download Your Newspaper" customClass="btn-download"/>
+                </div>
               </div>
             </div>
             <div className='hr'></div>
@@ -332,7 +321,7 @@ export default class App extends React.Component {
                   {this.state.posts.map((post, i) => {
                     return (
                       post.isChecked && (
-                        <div>
+                        <div key={i}>
                           <div
                             dangerouslySetInnerHTML={{ __html: post.html }}
                           />
@@ -346,7 +335,7 @@ export default class App extends React.Component {
                   })}
                 </div>
 
-                <div id='display-container'>
+                <div id='display-container' className="noprint">
                   {this.state.isloading ? (
                     <Loader />
                   ) : (
@@ -387,9 +376,11 @@ export default class App extends React.Component {
 
               <div className='ads-data'>
                 <div id='add-1' className='ads'>
-                  {!this.state.isDownloading &&<Adds random={this.state.adsToShow[0]} />}
+                  {!this.state.isDownloading && (
+                    <Adds random={this.state.adsToShow[0]} />
+                  )}
                 </div>
-                <div id="hide" className='wather'>
+                <div id='hide' className='wather'>
                   <a
                     className='weatherwidget-io'
                     href='https://forecast7.com/en/45d59n121d18/the-dalles/?unit=us'
@@ -434,7 +425,7 @@ export default class App extends React.Component {
                   Region.
                 </div>
                 <div id='add-2' className='ads'>
-                  <Adds random={this.state.adsToShow[1]}/>
+                  <Adds random={this.state.adsToShow[1]} />
                   {/* <Adds random={2} />
                   <Adds random={3} />
                   <Adds random={4} />

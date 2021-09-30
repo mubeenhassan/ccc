@@ -99,10 +99,9 @@ circle:nth-of-type(4) {
 }
 
 #main {
-  /* max-width: 29mm; */
-  max-width: 209mm;
+  max-width: 297mm;
   margin: auto;
-  padding: 4mm;
+  padding: 8mm 4mm;
   border: 2px solid darkgray;
 }
 
@@ -117,17 +116,12 @@ title {
   font-size: 24px;
   font-family: gibson-bold;
   text-align: center;
+  margin-top: 48px;
 }
 
 content {
   display: flex;
   flex-direction: column;
-}
-
-#page_number {
-  text-align: right;
-  margin-left: auto;
-  visibility: hidden;
 }
 
 .logo-img {
@@ -149,14 +143,14 @@ content {
 #today-date {
   text-align: left;
   margin-right: auto;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .hr {
-  width: 100%;
-  height: 1mm;
-  background: black;
-  margin: 2mm auto;
+  width: calc(100% + 8mm);
+  margin: 2mm 0;
+  margin-left: -4mm;
+  border-top: solid 1mm black !important;
 }
 
 .main-container {
@@ -165,16 +159,15 @@ content {
 }
 
 .posts {
-  width: 67%;
+  width: calc(70% - 4mm);
   display: flex;
   flex-direction: column;
-  margin-right: 2mm;
+  margin-right: 4mm;
 }
 
 .ads-data {
   width: 30%;
   display: flex;
-  margin-left: 2mm;
   flex-direction: column;
 }
 
@@ -211,19 +204,20 @@ figcaption p {
 
 .download-btn-container {
   display: flex;
+  align-items: center;
 }
 
 .download-btn-container button {
-  margin-left: auto;
-  border: none;
-  background: orange;
-  padding: 2mm;
-  color: white;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 2mm;
-  cursor: pointer;
 }
+
+ .download-btn-container #printBtn {
+  background-color: #358e47;
+} 
+
+ .download-btn-container #downloadBtn {
+  display: flex;
+} 
+
 .accordion-button:not(.collapsed) {
   color: white !important;
   background-color: #358e47 !important;
@@ -289,19 +283,205 @@ input[type='checkbox']:checked + label:after {
 }
 
 .adplugg-ad-wrapper{
-  transform: scale(0.6);
-  margin-left: -60px;
-  
+  transform: scale(0.8);
+  margin-left: -30px;
 }
 
 .add-img{
-  width: 250px;
-  max-width: 250px;
+  width: 300px;
+  max-width: 300px;
   margin-top: -400px;
-  margin-left: -8px;
+  margin-left: 0px;
 }
 
 .adplugg-custom-ad{
   height: 220px;
-  margin-bottom: 80px;
+  margin-bottom: 120px;
+}
+
+/* Blob Custom Button Start  */
+
+.buttons {
+  text-align: center;
+  border-radius: 30px;
+}
+
+.blob-btn {
+  z-index: 1;
+  position: relative;
+  padding: 10px 18px;
+  margin-bottom: 8px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #0505A9;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  transition: color 0.5s;
+  cursor: pointer;
+  border-radius: 30px;
+}
+.blob-btn:before {
+  content: "";
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #0505A9;
+  border-radius: 30px;
+}
+.blob-btn:after {
+  content: "";
+  z-index: -2;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s 0.2s;
+  border-radius: 30px;
+}
+.blob-btn:hover {
+  color: #FFFFFF !important;
+  border-radius: 30px;
+}
+.blob-btn:hover:after {
+  transition: all 0.3s;
+  left: 0;
+  top: 0;
+  border-radius: 30px;
+}
+.blob-btn__inner {
+  z-index: -1;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  background: #ffffff;
+}
+.blob-btn__blobs {
+  position: relative;
+  display: block;
+  height: 100%;
+  filter: url("#goo");
+}
+.blob-btn__blob {
+  position: absolute;
+  top: 2px;
+  width: 25%;
+  height: 100%;
+  background: #0505A9;
+  border-radius: 100%;
+  transform: translate3d(0, 150%, 0) scale(1.7);
+  transition: transform 0.45s;
+}
+
+.btn-download .blob-btn:before{
+  border: 2px solid #358e47;;
+}
+.btn-download .blob-btn{
+ color: #358e47;;
+}
+.btn-download .blob-btn__blob{
+  background: #358e47;;
+}
+
+@supports (filter: url("#goo")) {
+  .blob-btn__blob {
+    transform: translate3d(0, 150%, 0) scale(1.4);
+  }
+}
+.blob-btn__blob:nth-child(1) {
+  left: 0%;
+  transition-delay: 0s;
+}
+.blob-btn__blob:nth-child(2) {
+  left: 30%;
+  transition-delay: 0.08s;
+}
+.blob-btn__blob:nth-child(3) {
+  left: 60%;
+  transition-delay: 0.16s;
+}
+.blob-btn__blob:nth-child(4) {
+  left: 90%;
+  transition-delay: 0.24s;
+}
+.blob-btn:hover .blob-btn__blob {
+  transform: translateZ(0) scale(1.7);
+}
+@supports (filter: url("#goo")) {
+  .blob-btn:hover .blob-btn__blob {
+    transform: translateZ(0) scale(1.4);
+  }
+}
+
+.buttons svg{
+  display: none;
+}
+
+.btn-download{
+  margin-left: 8px;
+}
+
+/* Blob Custom Button End  */
+
+#pageborder {
+  display: none;
+  position:fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border: 2px solid black;
+}
+
+@media screen and (max-width:1024px) {
+  .adplugg-ad-wrapper{
+    transform: scale(0.70);
+    margin-left: -50px;
+  }
+}
+
+@media screen and (max-width:768px) {
+  .adplugg-ad-wrapper{
+    transform: scale(0.57);
+    margin-left: -65px;
+  }
+}
+
+@media print {
+  .noprint, #downloadBtn {
+     display: none !important;
+  }
+
+  #main{
+    border: none;
+    padding: 4mm;
+  }
+
+  #pdf-container,
+  #pageborder{
+    display: block;
+  }
+
+  .adplugg-ad-wrapper{
+    transform: scale(0.55);
+    margin-left: -70px;
+  }
+
+  .wather{
+    width: 200px;
+  }
+
+  #today-date{
+    font-size: 14px;
+  }
 }
