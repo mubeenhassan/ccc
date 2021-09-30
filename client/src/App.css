@@ -159,14 +159,14 @@ content {
 }
 
 .posts {
-  width: calc(70% - 4mm);
+  width: calc(68% - 4mm);
   display: flex;
   flex-direction: column;
   margin-right: 4mm;
 }
 
 .ads-data {
-  width: 30%;
+  width: 32%;
   display: flex;
   flex-direction: column;
 }
@@ -177,12 +177,13 @@ content {
 
 .wather {
   width: 225px;
+  height: 500px;
   margin: 32px auto;
 }
 
-.provided-text {
+.intro-text {
   margin: 4mm 0px;
-  text-align: center;
+  text-align: justify;
 }
 
 .posts img {
@@ -288,10 +289,17 @@ input[type='checkbox']:checked + label:after {
 }
 
 .add-img{
-  width: 300px;
-  max-width: 300px;
-  margin-top: -400px;
+  width: 210px;
+  max-width: 210px;
   margin-left: 0px;
+  display: none;
+}
+
+.download-pdf{
+  width: 300px !important;
+  max-width: 300px !important;
+  display: block !important;
+  margin-top: -350px;
 }
 
 .adplugg-custom-ad{
@@ -468,7 +476,8 @@ input[type='checkbox']:checked + label:after {
   }
 
   #pdf-container,
-  #pageborder{
+  #pageborder,  
+  .add-img{
     display: block;
   }
 
@@ -479,6 +488,7 @@ input[type='checkbox']:checked + label:after {
 
   .wather{
     width: 200px;
+    height: 200px;
   }
 
   #today-date{

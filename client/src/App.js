@@ -2,9 +2,11 @@ import React from 'react'
 import axios from 'axios'
 import './App.css'
 import Accordion from 'react-bootstrap/Accordion'
+import { Button } from 'react-bootstrap'
 import logo from './logo.png'
 import Adds from './components/Adds'
 import html2PDF from 'jspdf-html2canvas'
+import Modal from 'react-bootstrap/Modal'
 
 import Add_1 from './images/Add_1.png'
 import Add_2 from './images/Add_2.png'
@@ -54,12 +56,14 @@ export default class App extends React.Component {
       isDownloading: false,
       selectedPosts: 0,
       adsToShow: [],
+      showModal: false,
+      textToShow: '',
     }
   }
 
   componentDidMount() {
     this.setState({ isloading: true })
-    axios.get(`/api`).then((res) => {
+    axios.get(`http://localhost:3001/api`).then((res) => {
       this.puringfyingHtml(res.data)
     })
     this.watherFun(document, 'script', 'weatherwidget-io-js')
@@ -133,7 +137,11 @@ export default class App extends React.Component {
 
   handleSelectPost = (post) => {
     if (!post.isChecked && this.state.selectedPosts >= 5) {
-      alert('You can select 5 posts to download only!')
+      this.setState({
+        showModal: true,
+        textToShow:
+          'You can select 5 posts to download only! too: Hold onto your horses there partner, we have a max of 5 stories on a single print right now to keep your printer happy.',
+      })
     } else {
       let element = this.state.posts
       let newPosts = []
@@ -157,56 +165,57 @@ export default class App extends React.Component {
   }
 
   injectImages = (val) => {
-    var img = document.createElement('img')
-    img.className = 'add-img'
+    let newImg
     switch (val) {
       case 1:
-        img.src = Add_1
-        return img
+        newImg = Add_1
+        break
       case 2:
-        img.src = Add_2
-        return img
+        newImg = Add_2
+        break
       case 3:
-        img.src = Add_3
-        return img
+        newImg = Add_3
+        break
       case 4:
-        img.src = Add_4
-        return img
+        newImg = Add_4
+        break
       case 4:
-        img.src = Add_4
-        return img
+        newImg = Add_4
+        break
       case 5:
-        img.src = Add_5
-        return img
+        newImg = Add_5
+        break
       case 6:
-        img.src = Add_6
-        return img
+        newImg = Add_6
+        break
       case 7:
-        img.src = Add_7
-        return img
+        newImg = Add_7
+        break
       case 8:
-        img.src = Add_8
-        return img
+        newImg = Add_8
+        break
       case 9:
-        img.src = Add_9
-        return img
-
+        newImg = Add_9
+        break
       default:
+        newImg = Add_1
         break
     }
+    return <img className='add-img' src={newImg} />
   }
 
   handleDownload = async () => {
     if (this.state.selectedPosts <= 0) {
-      alert('Please select any post to download.')
+      this.setState({
+        showModal: true,
+        textToShow: 'Please select any post to download.',
+      })
       return
     }
-    document
-      .getElementById('add-1')
-      .appendChild(this.injectImages(this.state.adsToShow[0]))
-    document
-      .getElementById('add-2')
-      .appendChild(this.injectImages(this.state.adsToShow[1]))
+    const addImages = document.querySelectorAll('.add-img');
+    addImages.forEach(element => {
+      element.classList.add("download-pdf")
+    });
 
     let main = document.getElementById('main')
     let downloadBtn = document.getElementById('downloadBtn')
@@ -226,23 +235,34 @@ export default class App extends React.Component {
     downloadBtn.style.display = 'block'
     main.style.border = '2px solid darkgray'
     this.setState({ isDownloading: false })
+    addImages.forEach(element => {
+      element.classList.remove("download-pdf")
+    });
   }
 
-  handlePrint=()=>{
+  handlePrint = () => {
     if (this.state.selectedPosts <= 0) {
-      alert('Please select any post to download.')
+      this.setState({
+        showModal: true,
+        textToShow: 'Please select any post to download.',
+      })
       return
     }
-    window.print();
+    window.print()
   }
 
-
+  hidePopup = () => {
+    this.setState({
+      showModal: false,
+      textToShow: '',
+    })
+  }
 
   render() {
     const Loader = () => (
       <div className='loader-container'>
         <svg
-          class='loader'
+          className='loader'
           xmlns='http://www.w3.org/2000/svg'
           viewBox='0 0 340 340'
         >
@@ -255,15 +275,15 @@ export default class App extends React.Component {
     )
 
     const CustomButton = (props) => (
-      <div class={`buttons ${props.customClass}`}>
-        <button class="blob-btn" onClick={props.handleClick}>
+      <div className={`buttons ${props.customClass}`}>
+        <button className='blob-btn' onClick={props.handleClick}>
           {props.text}
-          <span class='blob-btn__inner'>
-            <span class='blob-btn__blobs'>
-              <span class='blob-btn__blob'></span>
-              <span class='blob-btn__blob'></span>
-              <span class='blob-btn__blob'></span>
-              <span class='blob-btn__blob'></span>
+          <span className='blob-btn__inner'>
+            <span className='blob-btn__blobs'>
+              <span className='blob-btn__blob'></span>
+              <span className='blob-btn__blob'></span>
+              <span className='blob-btn__blob'></span>
+              <span className='blob-btn__blob'></span>
             </span>
           </span>
         </button>
@@ -290,10 +310,28 @@ export default class App extends React.Component {
       </div>
     )
 
+    const Popup = () => (
+      <Modal
+        size='lg'
+        aria-labelledby='contained-modal-title-vcenter'
+        centered
+        show={this.state.showModal}
+        onHide={this.hidePopup}
+      >
+        <Modal.Body>
+          <h3 style={{ textAlign: 'center' }}>{this.state.textToShow}</h3>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={this.hidePopup} className='btn btn-success'>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+
     return (
       <div className='App'>
-        <div id="pageborder">
-  </div>
+        <div id='pageborder'></div>
         {this.state.isDownloading ? (
           <Loader />
         ) : (
@@ -307,9 +345,17 @@ export default class App extends React.Component {
               </div>
               <div className='download-btn-container'>
                 <h2 id='today-date'>{this.returnToday()}</h2>
-                <div id="downloadBtn">
-                <CustomButton handleClick={this.handlePrint} text="Create Your Newspaper" customClass="btn-print"/>
-                <CustomButton handleClick={this.handleDownload} text="Download Your Newspaper" customClass="btn-download"/>
+                <div id='downloadBtn'>
+                  <CustomButton
+                    handleClick={this.handlePrint}
+                    text='Create Your Newspaper'
+                    customClass='btn-print'
+                  />
+                  <CustomButton
+                    handleClick={this.handleDownload}
+                    text='Download Your Newspaper'
+                    customClass='btn-download'
+                  />
                 </div>
               </div>
             </div>
@@ -335,7 +381,7 @@ export default class App extends React.Component {
                   })}
                 </div>
 
-                <div id='display-container' className="noprint">
+                <div id='display-container' className='noprint'>
                   {this.state.isloading ? (
                     <Loader />
                   ) : (
@@ -376,9 +422,12 @@ export default class App extends React.Component {
 
               <div className='ads-data'>
                 <div id='add-1' className='ads'>
-                  {!this.state.isDownloading && (
-                    <Adds random={this.state.adsToShow[0]} />
-                  )}
+                  <div className='noprint'>
+                    {!this.state.isDownloading && (
+                      <Adds random={this.state.adsToShow[0]} />
+                    )}
+                  </div>
+                  {this.injectImages(this.state.adsToShow[0])}
                 </div>
                 <div id='hide' className='wather'>
                   <a
@@ -417,28 +466,46 @@ export default class App extends React.Component {
                     ></iframe>
                   </a>
                 </div>
-                <div className='provided-text'>
-                  Columbia Community Connection was established in 2020 as a
-                  local, honest and digital news source providing meaningful
-                  stories and articles. CCCNews’ primary goal is to inform and
-                  elevate all the residents and businesses of the Mid-Columbia
-                  Region.
+                <div className='intro-text'>
+                  While you're here, we have a small favour to ask...
+                  <br />
+                  Honest reporting on important local issues and happenings in
+                  the Mid-Columbia region is vital for a vibrant economy, for
+                  government accountability and to bring our communities
+                  together. Local news acts as a community advocate and CCC News
+                  journalists and editors are invested in the communities in
+                  which they have personal stake. In other words...we live here
+                  too. We’ve made it our mission to bring you, our neighbors
+                  closer together by improving access to honest local news
+                  through improved technology and innovation, and meaningful
+                  reporting. Since the spring of 2020 we have built a service
+                  that is free, carbon neutral and updated daily to over 50,000
+                  monthly local readers. We miss the morning paper on our
+                  doorstep and the black ink our fingers, but whether you’re
+                  sitting on the porch enjoying your morning coffee, or
+                  on-the-go, Columbia Community Connection is at your
+                  fingertips. You can help our team of journalists continue to
+                  build equity, accountability and trust to lift our communities
+                  up by choosing one of our subscriptions. All subscriptions and
+                  donations help us employ local journalists who work hard
+                  everyday at building and maintaining this free service we can
+                  all enjoy. You can find various support options at
+                  CCCNews.com/frienships. Thank you, we're glad you're here with
+                  us.
                 </div>
                 <div id='add-2' className='ads'>
-                  <Adds random={this.state.adsToShow[1]} />
-                  {/* <Adds random={2} />
-                  <Adds random={3} />
-                  <Adds random={4} />
-                  <Adds random={5} />
-                  <Adds random={6} />
-                  <Adds random={7} />
-                  <Adds random={8} />
-                  <Adds random={9} /> */}
+                  <div className='noprint'>
+                  {!this.state.isDownloading && (
+                      <Adds random={this.state.adsToShow[1]} />
+                    )}
+                  </div>
+                  {this.injectImages(this.state.adsToShow[1])}
                 </div>
               </div>
             </div>
           </div>
         )}
+        <Popup />
       </div>
     )
   }
