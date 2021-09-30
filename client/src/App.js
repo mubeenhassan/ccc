@@ -63,7 +63,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.setState({ isloading: true })
-    axios.get(`http://localhost:3001/api`).then((res) => {
+    axios.get(`/api`).then((res) => {
       this.puringfyingHtml(res.data)
     })
     this.watherFun(document, 'script', 'weatherwidget-io-js')
